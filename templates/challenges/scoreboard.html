@@ -1,0 +1,46 @@
+{% extends 'navigationbar.html' %}
+
+{% load static %}
+
+{% block title %}
+	<title>Scoreboard</title>
+{% endblock %}
+
+{% block customcss %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/challenges/score.css' %}">
+{% endblock %}
+
+{% block custombody %}
+	
+	<div id="pageHeading">
+		<p>Scoreboard</p>
+	</div>
+	
+	<div class="container">
+		<div id="score">
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Team Name</th>
+							<th>Points</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for team in teams %}
+						<tr>
+							<td>
+								<a href="/teams/{{ team.name }}" style="color: #008cba;">{{ team.name }}</a>
+							</td>
+							<td>
+								{{ team.total_score }}
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

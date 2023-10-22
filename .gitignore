@@ -1,0 +1,15 @@
+db.sqlite3
+
+apps/teams/__pycache__
+apps/teams/migrations
+
+apps/challenges/__pycache__
+apps/challenges/migrations
+
+/media
+/staticfiles
+
+core/__pycache__
+/venv/
+
+.env

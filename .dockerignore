@@ -1,0 +1,10 @@
+.git
+.gitignore
+.dockerignore
+
+venv/
+__pycache__/
+core/.env
+
+LICENSE
+.idea

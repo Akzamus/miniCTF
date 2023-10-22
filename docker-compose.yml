@@ -1,0 +1,16 @@
+services:
+  django:
+    container_name: minictf
+    image: minictf
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - django-static:/usr/src/app/staticfiles
+      - ./db.sqlite3:/usr/src/app/db.sqlite3
+      - ./media:/usr/src/app/media
+    command: python manage.py runserver 0.0.0.0:8000
+
+volumes:
+  django-static:

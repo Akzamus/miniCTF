@@ -1,0 +1,37 @@
+{% extends 'navigationbar.html' %}
+
+{% load static %}
+
+{% block title %}
+	<title>Login</title>
+{% endblock %}
+
+{% block customcss %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/teams/login.css' %}">
+{% endblock %}
+
+{% block custombody %}
+
+	<div id="pageHeading">
+		<p>Login</p>
+	</div>
+
+	<div id="register">
+		<div class="registerForm">
+			<form method="post">
+				{% csrf_token %}
+	
+				{% for field in form %}
+					<div>
+						<label>{{ field.label }}</label>
+						{{ field }}
+						{{ field.errors }}
+					</div>
+				{% endfor %}
+	
+				<button type="submit" name="submit" class="submitButton">Login</button>
+			</form>
+		</div>
+	</div>
+
+{% endblock %}

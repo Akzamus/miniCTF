@@ -1,0 +1,131 @@
+{% extends 'navigationbar.html' %}
+
+{% load static %}
+
+{% block title %}
+	<title>Challenges</title>
+{% endblock %}
+
+{% block customcss %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/challenges/challenges.css' %}">
+{% endblock %}
+
+{% block custombody %}
+
+	<!-- challenges display -->
+
+	<div id="pageHeading">
+		<p>Challenges</p>
+	</div>
+
+	<div id="challenges">
+		<div class="container">
+			<div class="challengesSet">
+
+                {% if categories %}
+                    {% for category in categories %}
+                        <div class="category">
+
+                            <div class="heading">
+                                <p>{{ category.name }}</p>
+                            </div>
+
+                            {% if category.challenges %}
+                                {% for challenge in category.challenges %}
+                                    {% if challenge.pk in solved_challenge_ids %}
+                                        <script type="text/javascript">
+                                            $(document).ready(function() {
+                                                $("#challenge_card_{{ challenge.pk }}").addClass("solved");
+                                            });
+                                        </script>
+                                    {% endif %}
+
+                                    <div
+                                        id="challenge_card_{{ challenge.pk }}"
+                                        class="challenge" data-toggle="modal"
+                                        data-target="#challenge_details_{{ challenge.pk }}"
+                                    >
+                                        <p>{{ challenge.name }}</p>
+                                        <p>{{ challenge.points }}</p>
+                                    </div>
+
+                                    <div class="modal fade" id="challenge_details_{{ challenge.pk }}" role="dialog" data-backdrop="static">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close closeIT" data-dismiss="modal">&times;</button>
+                                                    <h4 class="modal-title">{{ challenge.name }}</h4>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    <p><b>Challenge Description: </b></p>
+                                                    <p>{{ challenge.description }}</p>
+
+                                                    {% if challenge.file %}
+                                                        <p><b>File:</b> <a href="uploads/{{ challenge.file }}">download</a></p>
+                                                    {% endif %}
+
+                                                    <p><b>Points: </b>{{ challenge.points }}</p>
+
+                                                    <form method="post" id="{{ challenge.pk }}_form">
+                                                        {% csrf_token %}
+
+                                                        <input type="text" name="answer" class="form_input" placeholder="Answer">
+                                                        <input type="hidden" name="challenge_pk" class="form_input" value="{{ challenge.pk }}">
+
+                                                        <button type="submit" name="submit" class="submit_button">Submit</button>
+                                                    </form>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default closeIT" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <script type="text/javascript">
+                                        $(document).ready(function (){
+                                            $("#{{ challenge.pk }}_form").submit(function(event) {
+                                                $.ajax({
+                                                    type : "POST",
+                                                    url : "submit/",
+                                                    data : $(this).serialize(),
+                                                    success : function(response) {
+                                                        const html_text = {
+                                                            "ALREADY": `<div class="answer_already"><p>ALREADY SUBMITTED</p></div>`,
+                                                            "CORRECT": `<div class="answer_correct"><p>CORRECT</p></div>`,
+                                                            "INCORRECT": `<div class="answer_incorrect"><p>INCORRECT</p></div>`
+                                                        }[response.result]
+
+                                                        $("#{{ challenge.pk }}_form").append(html_text)
+                                                    }
+                                                });
+                                                event.preventDefault();
+                                            });
+                                        });
+                                    </script>
+
+                                {% endfor %}
+
+                            {% else %}
+                                <p style="color: red">No challenges available yet</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$(".closeIT").click(function() {
+				$(".answer_incorrect").remove();
+				$(".answer_correct").remove();
+				$(".answer_already").remove();
+			});
+		})
+	</script>
+
+{% endblock %}
