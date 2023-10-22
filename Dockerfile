@@ -11,6 +11,8 @@ RUN pip install --no-cache --upgrade pip \
  && pip install --no-cache -r requirements.txt \
  && pip install --no-cache gunicorn
 
+RUN python manage.py makemigrations
+
 COPY . .
 COPY .env ./core
 
