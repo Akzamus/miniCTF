@@ -13,6 +13,7 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', []).split(' ')
 
 CORS_ORIGIN_ALLOW_ALL = bool(os.getenv('CORS_ORIGIN_ALLOW_ALL', True))
 CORS_ORIGIN_WHITELIST = os.getenv('CORS_ORIGIN_WHITELIST').split(' ')
+CORS_ALLOW_METHODS = ['*']
 
 if not DEBUG and not CORS_ORIGIN_ALLOW_ALL:
     SECURE_SSL_REDIRECT = True
